@@ -2,10 +2,10 @@
 
 ### Backend `README.md`
 
-```markdown
+
 # Project Backend
 
-This is the backend repository for the [Project Name] application. It provides API endpoints and data management for the frontend application.
+This is the backend repository for the Finance Tracker application. It provides API endpoints and data management for the frontend application.
 
 ## Tech Stack
 
