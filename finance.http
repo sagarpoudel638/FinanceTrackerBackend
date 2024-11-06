@@ -1,0 +1,11 @@
+@api_url = http://localhost:9000/api/v1
+### Sign up 
+POST {{api_url}}/auth/signup
+Content-Type: application/json
+
+{
+  "name":"sagar",
+  "email" : "sagar@email.com",
+  "password": "ss",
+  "confirmPassword": "sagar"
+}
