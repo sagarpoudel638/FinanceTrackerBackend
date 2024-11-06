@@ -9,3 +9,6 @@ Content-Type: application/json
   "password": "ss",
   "confirmPassword": "sagar"
 }
+
+### login
+POST {{api_url}}/auth/login
