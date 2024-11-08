@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import { createUser } from "../models/userSchema.js";
-import {findUser }from "../models/userSchema.js"
+import { findUser } from "../models/userSchema.js";
 
 const router = express.Router();
 
@@ -50,30 +50,52 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+// LOGIN
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  const user = await findUser({ email }, true);
-  const isMatch = bcrypt.compare(password, user.password);
-  if (!user || !isMatch) {
+  try {
+    const { email, password } = req.body;
+    const user = await findUser({ email }, true);
+    if (!user) {
+      return res.status(401).send({
+        status: "error",
+        message: "Unauthenticated",
+        error: {
+          code: 401,
+          details: "Invalid email or password",
+        },
+      });
+    }
+
+    const isMatch = bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).send({
+        status: "error",
+        message: "Unauthenticated",
+        error: {
+          code: 401,
+          details: "Invalid email or password",
+        },
+      });
+    } else {
+      const respObj = {
+        status: "success",
+        message: "Login Successful",
+        data: {user:user.name},
+      };
+      console.log(respObj)
+      res.status(200).send(respObj);
+    }
+  } catch (error) {
     let errObj = {
       status: "error",
-      message: "Unauthenticated",
+      message: "Error Login",
       error: {
-        code: 401,
-        details: "Invalid email or password",
-      },
-    };
-    return res.status(401).send(errObj);
-  } else {
-    const respObj = {
-      status: "success",
-      message: "Login Successful",
-      data: {
-        //username: user.username,
+        code: 500,
+        details: error.message || "Error Login user",
       },
     };
 
-    res.status(200).send(respObj);
+    res.status(500).send(errObj);
   }
 });
 

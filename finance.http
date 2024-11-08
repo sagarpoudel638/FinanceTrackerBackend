@@ -7,8 +7,36 @@ Content-Type: application/json
   "name":"sagar",
   "email" : "sagar@email.com",
   "password": "ss",
-  "confirmPassword": "sagar"
+  "confirmPassword": "ss"
 }
 
 ### login
 POST {{api_url}}/auth/login
+Content-Type: application/json
+
+{
+  "email" : "sagar@email.com",
+  "password": "ss"
+}
+
+### Create transactions 
+POST {{api_url}}/transactions/transaction
+Content-Type: application/json
+
+{
+  "title":"salary",
+  "income":1000
+}
+
+### Get all transactions 
+GET  {{api_url}}/transactions
+Content-Type: application/json
+
+### Get transaction by id 
+GET  {{api_url}}/transactions/672dd76e7c07cb931486df47
+Content-Type: application/json
+
+
+### Delete Transaction 
+DELETE  {{api_url}}/transactions/672dd76e7c07cb931486df47
+Content-Type: application/json

@@ -6,6 +6,7 @@ import { connectMongoDB } from "./src/config/dbConfig.js";
 // get config file
 import { config } from "./src/config/config.js";
 import authRouter from "./src/router/authRouter.js";
+import transactionsRouter from "./src/router/transactionRouter.js"
 
 const app = express();
 const PORT = config.port;
@@ -21,6 +22,8 @@ app.get("/", (request, response) => {
   });
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/transactions",transactionsRouter);
+
 
 app.listen(PORT, (error) => {
   error
