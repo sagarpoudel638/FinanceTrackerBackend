@@ -56,11 +56,12 @@ router.get("/:id", async (req, res) => {
 // Create Transaction
 router.post("/transaction", async (req, res) => {
   try {
-    const { title, income, expenses } = req.body;
+    const { title, income, expenses,createdAt } = req.body;
     const transactionData = await createTransaction({
       title,
       income,
       expenses,
+      createdAt,
     });
     const respObj = {
       status: "success",

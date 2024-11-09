@@ -7,13 +7,15 @@ const transactionsSchema = new mongoose.Schema({
   },
   income: {
     type: Number,
+    default:0,
   },
   expenses: {
     type: Number,
+    default:0,
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 export const Transactions = mongoose.model("transactions", transactionsSchema);

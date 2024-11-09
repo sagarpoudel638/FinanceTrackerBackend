@@ -25,7 +25,8 @@ Content-Type: application/json
 
 {
   "title":"salary",
-  "income":1000
+  "income":1000,
+  "createdAt": "2024-10-13"
 }
 
 ### Get all transactions 
