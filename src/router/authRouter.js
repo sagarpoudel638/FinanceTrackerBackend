@@ -2,11 +2,12 @@ import express from "express";
 import bcrypt from "bcrypt";
 import { createUser } from "../models/userSchema.js";
 import { findUser } from "../models/userSchema.js";
+import { loginValidator, signupValidator } from "../middleware/joiValidation.js";
 
 const router = express.Router();
 
 // SIGN UP
-router.post("/signup", async (req, res) => {
+router.post("/signup", signupValidator, async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
     if (password == confirmPassword) {
@@ -51,7 +52,7 @@ router.post("/signup", async (req, res) => {
 });
 
 // LOGIN
-router.post("/login", async (req, res) => {
+router.post("/login",loginValidator, async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await findUser({ email }, true);
@@ -66,7 +67,7 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    const isMatch = bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).send({
         status: "error",

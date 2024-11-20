@@ -67,6 +67,7 @@ router.post("/transaction", async (req, res) => {
       status: "success",
       message: "Transaction Added Successfully!",
     };
+    console.log(transactionData)
     res.status(200).send(respObj);
   } catch (error) {
     let errObj = {
