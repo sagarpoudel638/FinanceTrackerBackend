@@ -1,4 +1,6 @@
 import express from "express";
+import jwt from "jsonwebtoken";
+import { config } from "../config/config.js";
 import bcrypt from "bcrypt";
 import { createUser } from "../models/userSchema.js";
 import { findUser } from "../models/userSchema.js";
@@ -78,10 +80,17 @@ router.post("/login",loginValidator, async (req, res) => {
         },
       });
     } else {
+      const token = jwt.sign(
+        { _id: user._id, email: user.email, username: user.username },
+        config.jwtSecret,
+        {
+          expiresIn: config.jwtExpire,
+        }
+      );
       const respObj = {
         status: "success",
         message: "Login Successful",
-        data: {user:user.name},
+        data: {user:user.name, token},
       };
       console.log(respObj)
       res.status(200).send(respObj);

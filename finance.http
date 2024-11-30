@@ -31,7 +31,10 @@ Content-Type: application/json
 
 ### Get all transactions 
 GET  {{api_url}}/transactions
+Authorization: Bearer eyJhbGciOiJIUzI1NiIInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzRhZWE1YmVhYmVhODc0YThmZDdmZTkiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsImlhdCI6MTczMjk2MzE1OSwiZXhwIjoxNzMzMDQ5NTU5fQ.TIbzXk8l1gVTlc-leCUMpQkVR3C4IaHLdBGHlhi1W1M
+
 Content-Type: application/json
+
 
 ### Get transaction by id 
 GET  {{api_url}}/transactions/672dd76e7c07cb931486df47

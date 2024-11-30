@@ -5,11 +5,12 @@ import {
   getTransactionbyID,
   getTransactions,
 } from "../models/transactionsSchema.js";
+import { authMiddleware } from "../middleware/AuthMiddleware.js";
 
 const router = express.Router();
 
 // Get all Transactions
-router.get("/", async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
   try {
     let data = await getTransactions();
     let transactionData = [...data];
@@ -34,7 +35,7 @@ router.get("/", async (req, res) => {
 });
 
 // get Transaction by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const transactionData = await getTransactionbyID(id);
@@ -54,7 +55,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 // Create Transaction
-router.post("/transaction", async (req, res) => {
+router.post("/transaction", authMiddleware, async (req, res) => {
   try {
     const { title, income, expenses,createdAt } = req.body;
     const transactionData = await createTransaction({
@@ -84,7 +85,7 @@ router.post("/transaction", async (req, res) => {
 });
 
 // Delete transaction
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const transactionData = await getTransactionbyID(id);
