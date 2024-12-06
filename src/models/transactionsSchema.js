@@ -37,3 +37,12 @@ export const deleteTransaction = async (id) => {
     return await Transactions.findByIdAndDelete(id); 
 }
 
+export const updateTransaction = async (id, updateData) => {
+  const data = await Transactions.findByIdAndUpdate(
+    id,{
+      $set: updateData,
+    },
+    {new: true}
+  );
+  return data;
+}

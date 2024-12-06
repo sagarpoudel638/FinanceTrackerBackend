@@ -4,6 +4,7 @@ import {
   deleteTransaction,
   getTransactionbyID,
   getTransactions,
+  updateTransaction,
 } from "../models/transactionsSchema.js";
 import { authMiddleware } from "../middleware/AuthMiddleware.js";
 
@@ -120,4 +121,31 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     return res.status(500).send(errObj);
   }
 });
+
+// Update transactions 
+
+router.patch("/:id", authMiddleware, async (req,res) => {
+  try {
+    const {id} = req.params;
+    const transactionData = req.body;
+    const updatedData = await updateTransaction(id, transactionData);
+    const respObj = {
+      status: "success",
+      message: "Post updated successfully"
+    };
+    return res.status(200).send(respObj);
+  } catch (err) {
+    console.log(err);
+    const errObj = {
+      status: "error",
+      message: "Error updating",
+      error: {
+        code: 500,
+        details: err.message || "Error updating transaction",
+      },
+    };
+
+    return res.status(errObj.error.code).send(errObj);
+  }
+})
 export default router;

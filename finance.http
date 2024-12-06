@@ -44,3 +44,13 @@ Content-Type: application/json
 ### Delete Transaction 
 DELETE  {{api_url}}/transactions/672dd76e7c07cb931486df47
 Content-Type: application/json
+
+
+### Update Transaction 
+@transaction_id = 
+PATCH {{api_url}}/transactions/{{transaction_id}}
+Content-Type: application/json
+
+{
+  "title": "updated"
+}
