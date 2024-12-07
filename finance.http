@@ -21,6 +21,7 @@ Content-Type: application/json
 
 ### Create transactions 
 POST {{api_url}}/transactions/transaction
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzRhZWE1YmVhYmVhODc0YThmZDdmZTkiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsIm5hbWUiOiJzYWdhciIsImlhdCI6MTczMzU2MzIxNiwiZXhwIjoxNzMzNjQ5NjE2fQ.M-4gbV3Ao0wQI5jhB2PcZU9EJFQR-KtcKmLCumtQaXo"
 Content-Type: application/json
 
 {
@@ -31,13 +32,14 @@ Content-Type: application/json
 
 ### Get all transactions 
 GET  {{api_url}}/transactions
-Authorization: Bearer eyJhbGciOiJIUzI1NiIInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzRhZWE1YmVhYmVhODc0YThmZDdmZTkiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsImlhdCI6MTczMjk2MzE1OSwiZXhwIjoxNzMzMDQ5NTU5fQ.TIbzXk8l1gVTlc-leCUMpQkVR3C4IaHLdBGHlhi1W1M
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzRhZWE1YmVhYmVhODc0YThmZDdmZTkiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsIm5hbWUiOiJzYWdhciIsImlhdCI6MTczMzU2MzIxNiwiZXhwIjoxNzMzNjQ5NjE2fQ.M-4gbV3Ao0wQI5jhB2PcZU9EJFQR-KtcKmLCumtQaXo
 Content-Type: application/json
 
 
 ### Get transaction by id 
-GET  {{api_url}}/transactions/672dd76e7c07cb931486df47
+POST  {{api_url}}/transactions/672de7eb22de7c1125b86a77
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzRhZWE1YmVhYmVhODc0YThmZDdmZTkiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsImlhdCI6MTczMzQ3MzEyMiwiZXhwIjoxNzMzNTU5NTIyfQ.xRmyq3S3zeAxt7Cmnw0IB61AEf2VFODmMeneXJkjo80
+
 Content-Type: application/json
 
 
@@ -47,8 +49,9 @@ Content-Type: application/json
 
 
 ### Update Transaction 
-@transaction_id = 
+@transaction_id = 672de7eb22de7c1125b86a73
 PATCH {{api_url}}/transactions/{{transaction_id}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzRhZWE1YmVhYmVhODc0YThmZDdmZTkiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsImlhdCI6MTczMzQ3MzEyMiwiZXhwIjoxNzMzNTU5NTIyfQ.xRmyq3S3zeAxt7Cmnw0IB61AEf2VFODmMeneXJkjo80
 Content-Type: application/json
 
 {

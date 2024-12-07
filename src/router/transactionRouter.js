@@ -36,7 +36,7 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 // get Transaction by ID
-router.get("/:id", authMiddleware, async (req, res) => {
+router.post("/:id", authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const transactionData = await getTransactionbyID(id);
@@ -56,9 +56,14 @@ router.get("/:id", authMiddleware, async (req, res) => {
   }
 });
 // Create Transaction
-router.post("/transaction", authMiddleware, async (req, res) => {
+router.post("/transaction", async (req, res) => {
   try {
-    const { title, income, expenses,createdAt } = req.body;
+    const { title, income, expenses, createdAt } = req.body;
+    // if (!title || !income || !createdAt) {
+    //   return res.status(400).json({
+    //     message: "Missing required fields: title, income, or createdAt",
+    //   });
+    // }
     const transactionData = await createTransaction({
       title,
       income,
@@ -69,7 +74,7 @@ router.post("/transaction", authMiddleware, async (req, res) => {
       status: "success",
       message: "Transaction Added Successfully!",
     };
-    console.log(transactionData)
+    console.log(transactionData);
     res.status(200).send(respObj);
   } catch (error) {
     let errObj = {
@@ -122,16 +127,16 @@ router.delete("/:id", authMiddleware, async (req, res) => {
   }
 });
 
-// Update transactions 
+// Update transactions
 
-router.patch("/:id", authMiddleware, async (req,res) => {
+router.patch("/:id", authMiddleware, async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const transactionData = req.body;
     const updatedData = await updateTransaction(id, transactionData);
     const respObj = {
       status: "success",
-      message: "Post updated successfully"
+      message: "Post updated successfully",
     };
     return res.status(200).send(respObj);
   } catch (err) {
@@ -147,5 +152,5 @@ router.patch("/:id", authMiddleware, async (req,res) => {
 
     return res.status(errObj.error.code).send(errObj);
   }
-})
+});
 export default router;

@@ -10,9 +10,13 @@ export const authMiddleware = (req, res, next) => {
       };
       return res.status(401).send(respObj);
     }
+    console.log(token,"q")
     try {
+      // console.log(config.jwtSecret)
+      console.log(token, "inside try catch")
       const decoded = jwt.verify(token, config.jwtSecret);
       req.user = decoded;
+      console.log(req.user)
       next();
     } catch (err) {
       if (err.name === "TokenExpiredError") {

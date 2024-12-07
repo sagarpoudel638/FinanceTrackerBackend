@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import { createUser } from "../models/userSchema.js";
 import { findUser } from "../models/userSchema.js";
 import { loginValidator, signupValidator } from "../middleware/joiValidation.js";
+import { authMiddleware } from "../middleware/AuthMiddleware.js";
 
 const router = express.Router();
 
@@ -81,7 +82,7 @@ router.post("/login",loginValidator, async (req, res) => {
       });
     } else {
       const token = jwt.sign(
-        { _id: user._id, email: user.email, username: user.username },
+        { _id: user._id, email: user.email, name: user.name },
         config.jwtSecret,
         {
           expiresIn: config.jwtExpire,
@@ -107,6 +108,17 @@ router.post("/login",loginValidator, async (req, res) => {
 
     res.status(500).send(errObj);
   }
+});
+
+
+router.get("/verify", authMiddleware,async (req, res) => {
+  const respObj = {
+    status: "success",
+    message: "Verified",
+    data: { user: req.user.name },
+  };
+
+  return res.status(200).send(respObj);
 });
 
 export default router;
