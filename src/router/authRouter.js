@@ -4,8 +4,12 @@ import { config } from "../config/config.js";
 import bcrypt from "bcrypt";
 import { createUser } from "../models/userSchema.js";
 import { findUser } from "../models/userSchema.js";
-import { loginValidator, signupValidator } from "../middleware/joiValidation.js";
+import {
+  loginValidator,
+  signupValidator,
+} from "../middleware/joiValidation.js";
 import { authMiddleware } from "../middleware/AuthMiddleware.js";
+import { sendVerificationMail } from "../utils/mailer.js";
 
 const router = express.Router();
 
@@ -13,6 +17,7 @@ const router = express.Router();
 router.post("/signup", signupValidator, async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
+
     if (password == confirmPassword) {
       const newPassword = password;
       const salt = await bcrypt.genSalt(10);
@@ -23,6 +28,18 @@ router.post("/signup", signupValidator, async (req, res) => {
         email,
         password: hashedpassword,
       });
+      //verfication Token
+      const verificationToken = jwt.sign(
+        { _id: userData._id, email: userData.email, name: userData.name },
+        config.jwtSecret,
+        {
+          expiresIn: "365d",
+        }
+      );
+
+      userData.verificationToken = verificationToken;
+      await userData.save();
+      await sendVerificationMail(email, `url ${verificationToken}`);
       const respObj = {
         status: "success",
         message: "User created successfully!",
@@ -55,7 +72,7 @@ router.post("/signup", signupValidator, async (req, res) => {
 });
 
 // LOGIN
-router.post("/login",loginValidator, async (req, res) => {
+router.post("/login", loginValidator, async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await findUser({ email }, true);
@@ -91,9 +108,9 @@ router.post("/login",loginValidator, async (req, res) => {
       const respObj = {
         status: "success",
         message: "Login Successful",
-        data: {user:user.name, token},
+        data: { user: user.name, token },
       };
-      console.log(respObj)
+      console.log(respObj);
       res.status(200).send(respObj);
     }
   } catch (error) {
@@ -110,8 +127,7 @@ router.post("/login",loginValidator, async (req, res) => {
   }
 });
 
-
-router.get("/verify", authMiddleware,async (req, res) => {
+router.get("/verify", authMiddleware, async (req, res) => {
   const respObj = {
     status: "success",
     message: "Verified",

@@ -11,6 +11,7 @@ const signupSchema = Joi.object({
   email:Joi.string().email({ minDomainSegments: 2 }).required(),
   password:Joi.string().required(),
   confirmPassword:Joi.string().required(),
+//   isVerify: Joi.string().required(),
 })
 
 
