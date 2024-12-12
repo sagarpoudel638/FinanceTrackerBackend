@@ -28,34 +28,12 @@ router.get("/", authMiddleware, async (req, res) => {
       message: "Error fetching",
       error: {
         code: 500,
-        details: error.message || "Erro fetching transactions",
+        details: error.message || "Error fetching transactions",
       },
     };
     return res.status(500).send(errObj);
   }
 });
-
-// get Transaction by ID
-router.post("/:id", authMiddleware, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const transactionData = await getTransactionbyID(id);
-
-    const resObj = {
-      status: "success",
-      message: "Successfully fetched Transaction",
-      data: transactionData,
-    };
-    return res.status(200).send(resObj);
-  } catch (error) {
-    let errObj = {
-      status: "error",
-      message: "Error in  fetching Transaction",
-    };
-    return res.status(500).send(errObj);
-  }
-});
-// Create Transaction
 router.post("/transaction", async (req, res) => {
   try {
     const { title, income, expenses, createdAt } = req.body;
@@ -89,6 +67,29 @@ router.post("/transaction", async (req, res) => {
     res.status(500).send(errObj);
   }
 });
+
+// get Transaction by ID
+router.post("/:id", authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const transactionData = await getTransactionbyID(id);
+
+    const resObj = {
+      status: "success",
+      message: "Successfully fetched Transaction",
+      data: transactionData,
+    };
+    return res.status(200).send(resObj);
+  } catch (error) {
+    let errObj = {
+      status: "error",
+      message: "Error in  fetching Transaction",
+    };
+    return res.status(500).send(errObj);
+  }
+});
+// Create Transaction
+
 
 // Delete transaction
 router.delete("/:id", authMiddleware, async (req, res) => {

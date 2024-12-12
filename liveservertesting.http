@@ -1,0 +1,59 @@
+@api_url = https://financetrackerbackend-jxbb.onrender.com/api/v1
+
+### Sign up 
+POST {{api_url}}/auth/signup
+Content-Type: application/json
+
+{
+  "name":"sagar",
+  "email" : "sagar@email.com",
+  "password": "ss",
+  "confirmPassword": "ss"
+}
+
+### login
+POST {{api_url}}/auth/login
+Content-Type: application/json
+
+{
+  "email" : "sagar@email.com",
+  "password": "ss"
+}
+
+### Create transactions 
+POST {{api_url}}/transactions/transaction
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVhNGFlNjNjZTE3ZTlkYWU5NmU3YjAiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsIm5hbWUiOiJzYWdhciIsImlhdCI6MTczMzk3MDcxNiwiZXhwIjoxNzM0MDU3MTE2fQ.7y2Eo-J6uKq7uQRkwSXGJsfkZdScbzp18lS-1zeIUU0
+Content-Type: application/json
+
+{
+  "title":"salary",
+  "income":1000,
+  "createdAt": "2024-10-13"
+}
+
+### Get all transactions 
+GET  {{api_url}}/transactions
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVhNGFlNjNjZTE3ZTlkYWU5NmU3YjAiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsIm5hbWUiOiJzYWdhciIsImlhdCI6MTczMzk3MDcxNiwiZXhwIjoxNzM0MDU3MTE2fQ.7y2Eo-J6uKq7uQRkwSXGJsfkZdScbzp18lS-1zeIUU0
+Content-Type: application/json
+
+
+### Get transaction by id 
+POST  {{api_url}}/transactions/672de7eb22de7c1125b86a77
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVhNGFlNjNjZTE3ZTlkYWU5NmU3YjAiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsIm5hbWUiOiJzYWdhciIsImlhdCI6MTczMzk3MDcxNiwiZXhwIjoxNzM0MDU3MTE2fQ.7y2Eo-J6uKq7uQRkwSXGJsfkZdScbzp18lS-1zeIUU0
+Content-Type: application/json
+
+
+### Delete Transaction 
+DELETE  {{api_url}}/transactions/672dd76e7c07cb931486df47
+Content-Type: application/json
+
+
+### Update Transaction 
+@transaction_id = 672de7eb22de7c1125b86a77
+PATCH {{api_url}}/transactions/{{transaction_id}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzVhNGFlNjNjZTE3ZTlkYWU5NmU3YjAiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsIm5hbWUiOiJzYWdhciIsImlhdCI6MTczMzk3MDcxNiwiZXhwIjoxNzM0MDU3MTE2fQ.7y2Eo-J6uKq7uQRkwSXGJsfkZdScbzp18lS-1zeIUU0
+Content-Type: application/json
+
+{
+  "title": "updated"
+}
