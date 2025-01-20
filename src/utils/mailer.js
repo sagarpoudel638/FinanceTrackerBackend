@@ -25,8 +25,8 @@ export const sendVerificationMail = async (toEmail, verificationLink) => {
    
     const emailObj = {
       from: `"Support Team" <${process.env.SMTP_USERNAME}>`, // sender address
-      to: toEmail, // recipient address
-      subject: "Verify Your Email", // Subject line
+      to: toEmail, 
+      subject: "Verify Your Email", 
       text: `Please verify your email by clicking the link: ${verificationLink}`, // Plain text body for fallback
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
