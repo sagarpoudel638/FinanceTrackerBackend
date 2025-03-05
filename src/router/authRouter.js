@@ -108,7 +108,7 @@ router.post("/login", loginValidator, async (req, res) => {
       const respObj = {
         status: "success",
         message: "Login Successful",
-        data: { user: user.name, token },
+        data: { username: user.name, userId:user._id,token },
       };
       console.log(respObj);
       res.status(200).send(respObj);

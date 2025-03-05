@@ -13,7 +13,8 @@ const router = express.Router();
 // Get all Transactions
 router.get("/", authMiddleware, async (req, res) => {
   try {
-    let data = await getTransactions();
+    let userId  = req.user._id;
+    let data = await getTransactions(userId);
     let transactionData = [...data];
 
     const respObj = {
@@ -34,8 +35,15 @@ router.get("/", authMiddleware, async (req, res) => {
     return res.status(500).send(errObj);
   }
 });
-router.post("/transaction", async (req, res) => {
+router.post("/transaction",authMiddleware, async (req, res) => {
   try {
+    //console.log("User:", req.user);
+    console.log(req.body)
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = req.user._id; 
     const { title, income, expenses, createdAt } = req.body;
     // if (!title || !income || !createdAt) {
     //   return res.status(400).json({
@@ -43,6 +51,8 @@ router.post("/transaction", async (req, res) => {
     //   });
     // }
     const transactionData = await createTransaction({
+
+      userId,
       title,
       income,
       expenses,
@@ -71,8 +81,9 @@ router.post("/transaction", async (req, res) => {
 // get Transaction by ID
 router.post("/:id", authMiddleware, async (req, res) => {
   try {
+    const userId = req.user._id;
     const { id } = req.params;
-    const transactionData = await getTransactionbyID(id);
+    const transactionData = await getTransactionbyID(id,userId);
 
     const resObj = {
       status: "success",
@@ -94,8 +105,9 @@ router.post("/:id", authMiddleware, async (req, res) => {
 // Delete transaction
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
+    const userId = req.user._id;
     const { id } = req.params;
-    const transactionData = await getTransactionbyID(id);
+    const transactionData = await getTransactionbyID(id,userId);
     if (!transactionData) {
       const errObj = {
         status: "error",
@@ -132,9 +144,10 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 
 router.patch("/:id", authMiddleware, async (req, res) => {
   try {
+    const userId = req.user._id;
     const { id } = req.params;
     const transactionData = req.body;
-    const updatedData = await updateTransaction(id, transactionData);
+    const updatedData = await updateTransaction(id,userId,transactionData);
     const respObj = {
       status: "success",
       message: "Post updated successfully",

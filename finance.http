@@ -15,43 +15,44 @@ POST {{api_url}}/auth/login
 Content-Type: application/json
 
 {
-  "email" : "sagar@email.com",
-  "password": "ss"
+  "email" : "sagar@test.com",
+  "password": "test1234@"
 }
 
 ### Create transactions 
 POST {{api_url}}/transactions/transaction
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzRhZWE1YmVhYmVhODc0YThmZDdmZTkiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsIm5hbWUiOiJzYWdhciIsImlhdCI6MTczMzU2MzIxNiwiZXhwIjoxNzMzNjQ5NjE2fQ.M-4gbV3Ao0wQI5jhB2PcZU9EJFQR-KtcKmLCumtQaXo"
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2M2NmJjODNkMDMxZTQ3YjhmMTFhMjYiLCJlbWFpbCI6InNhZ2FyQHRlc3QuY29tIiwibmFtZSI6IlNhZ2FyIiwiaWF0IjoxNzQxMTM3NzEyLCJleHAiOjE3NDEyMjQxMTJ9.xPIyq2Zw0wgzeCPE_YJo07gy03km1iA9BJozNcVGB0Q
 Content-Type: application/json
 
 {
-  "title":"salary",
+  
+  "title": "salary",
   "income":1000,
   "createdAt": "2024-10-13"
 }
 
 ### Get all transactions 
 GET  {{api_url}}/transactions
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzRhZWE1YmVhYmVhODc0YThmZDdmZTkiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsIm5hbWUiOiJzYWdhciIsImlhdCI6MTczMzU2MzIxNiwiZXhwIjoxNzMzNjQ5NjE2fQ.M-4gbV3Ao0wQI5jhB2PcZU9EJFQR-KtcKmLCumtQaXo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2M2NmJjODNkMDMxZTQ3YjhmMTFhMjYiLCJlbWFpbCI6InNhZ2FyQHRlc3QuY29tIiwibmFtZSI6IlNhZ2FyIiwiaWF0IjoxNzQxMTM3NzEyLCJleHAiOjE3NDEyMjQxMTJ9.xPIyq2Zw0wgzeCPE_YJo07gy03km1iA9BJozNcVGB0Q
 Content-Type: application/json
 
 
 ### Get transaction by id 
-POST  {{api_url}}/transactions/672de7eb22de7c1125b86a77
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzRhZWE1YmVhYmVhODc0YThmZDdmZTkiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsImlhdCI6MTczMzQ3MzEyMiwiZXhwIjoxNzMzNTU5NTIyfQ.xRmyq3S3zeAxt7Cmnw0IB61AEf2VFODmMeneXJkjo80
-
+POST  {{api_url}}/transactions/67c7ac69af9b3b41d2f03e72
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2M2NmJjODNkMDMxZTQ3YjhmMTFhMjYiLCJlbWFpbCI6InNhZ2FyQHRlc3QuY29tIiwibmFtZSI6IlNhZ2FyIiwiaWF0IjoxNzQxMTM3NzEyLCJleHAiOjE3NDEyMjQxMTJ9.xPIyq2Zw0wgzeCPE_YJo07gy03km1iA9BJozNcVGB0Q
 Content-Type: application/json
 
 
 ### Delete Transaction 
-DELETE  {{api_url}}/transactions/672dd76e7c07cb931486df47
+DELETE  {{api_url}}/transactions/67c7ac69af9b3b41d2f03e72
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2M2NmJjODNkMDMxZTQ3YjhmMTFhMjYiLCJlbWFpbCI6InNhZ2FyQHRlc3QuY29tIiwibmFtZSI6IlNhZ2FyIiwiaWF0IjoxNzQxMTM3NzEyLCJleHAiOjE3NDEyMjQxMTJ9.xPIyq2Zw0wgzeCPE_YJo07gy03km1iA9BJozNcVGB0Q
 Content-Type: application/json
 
 
 ### Update Transaction 
-@transaction_id = 672de7eb22de7c1125b86a73
+@transaction_id = 67c7ac8baf9b3b41d2f03e74
 PATCH {{api_url}}/transactions/{{transaction_id}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzRhZWE1YmVhYmVhODc0YThmZDdmZTkiLCJlbWFpbCI6InNhZ2FyQGVtYWlsLmNvbSIsImlhdCI6MTczMzQ3MzEyMiwiZXhwIjoxNzMzNTU5NTIyfQ.xRmyq3S3zeAxt7Cmnw0IB61AEf2VFODmMeneXJkjo80
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2M2NmJjODNkMDMxZTQ3YjhmMTFhMjYiLCJlbWFpbCI6InNhZ2FyQHRlc3QuY29tIiwibmFtZSI6IlNhZ2FyIiwiaWF0IjoxNzQxMTM3NzEyLCJleHAiOjE3NDEyMjQxMTJ9.xPIyq2Zw0wgzeCPE_YJo07gy03km1iA9BJozNcVGB0Q
 Content-Type: application/json
 
 {

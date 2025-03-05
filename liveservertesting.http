@@ -1,12 +1,12 @@
-@api_url = https://financetrackerbackend-jxbb.onrender.com/api/v1
+@api_url = http://financetrackerbe-env.eba-gti8bw6i.ap-southeast-2.elasticbeanstalk.com/api/v1
 
 ### Sign up 
 POST {{api_url}}/auth/signup
 Content-Type: application/json
 
 {
-  "name":"sagar",
-  "email" : "sagar@email.com",
+  "name":"new",
+  "email" : "aws@email.com",
   "password": "ss",
   "confirmPassword": "ss"
 }
