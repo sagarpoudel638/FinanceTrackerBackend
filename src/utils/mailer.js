@@ -2,15 +2,12 @@ import nodemailer from "nodemailer";
 
 // Create the transporter
 const transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
-  port: 587,
-  secure: false, // true for 465, false for other ports
+  service: "gmail", 
   auth: {
-    user: process.env.SMTP_USERNAME,
-    pass: process.env.SMTP_PASS,
-  
+    user: process.env.SMTP_USERNAME, 
+    pass: process.env.SMTP_PASS, 
   },
-  logger: true, 
+  logger: true,
   debug: true,
 });
 
@@ -24,10 +21,10 @@ export const sendVerificationMail = async (toEmail, verificationLink) => {
     console.log(`SMTP User: ${process.env.SMTP_USERNAME}`);
    
     const emailObj = {
-      from: `"Support Team" <${process.env.SMTP_USERNAME}>`, // sender address
+      from: `"Support Team" <${process.env.SMTP_USERNAME}>`, 
       to: toEmail, 
       subject: "Verify Your Email", 
-      text: `Please verify your email by clicking the link: ${verificationLink}`, // Plain text body for fallback
+      text: `Please verify your email by clicking the link: ${verificationLink}`, 
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
           <h2 style="color: #1f7cec;">Welcome to Our Service!</h2>

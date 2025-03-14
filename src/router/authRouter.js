@@ -33,13 +33,15 @@ router.post("/signup", signupValidator, async (req, res) => {
         { _id: userData._id, email: userData.email, name: userData.name },
         config.jwtSecret,
         {
-          expiresIn: "365d",
+          expiresIn: "3d",
         }
       );
 
       userData.verificationToken = verificationToken;
       await userData.save();
-      await sendVerificationMail(email, `url ${verificationToken}`);
+
+      const verificationLink = `${process.env.BASE_URL}/auth/api/useremailverification/${verificationToken}`;
+      await sendVerificationMail(email, verificationLink);
       const respObj = {
         status: "success",
         message: "User created successfully!",
@@ -87,6 +89,8 @@ router.post("/login", loginValidator, async (req, res) => {
       });
     }
 
+
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).send({
@@ -97,7 +101,17 @@ router.post("/login", loginValidator, async (req, res) => {
           details: "Invalid email or password",
         },
       });
-    } else {
+
+    } 
+    
+    if (!user.isVerified) {
+      return res.status(403).send({
+        status: "error",
+        message: "Please verify your email to access your account.",
+      });
+    }
+    
+    else {
       const token = jwt.sign(
         { _id: user._id, email: user.email, name: user.name },
         config.jwtSecret,
@@ -136,5 +150,109 @@ router.get("/verify", authMiddleware, async (req, res) => {
 
   return res.status(200).send(respObj);
 });
+
+// EMAIL VERIFICATION
+router.get("/api/useremailverification/:token", async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    // Verify the token
+    const decoded = jwt.verify(token, config.jwtSecret);
+    const { _id } = decoded;
+
+    // Find user with the _id and matching token
+    const user = await findUser({ _id });
+
+    if (!user) {
+      return res.status(404).send({
+        status: "error",
+        message: "User not found",
+      });
+    }
+
+    if (user.isVerified) {
+      return res.status(200).send({
+        status: "success",
+        message: "Your email is already verified.",
+      });
+    }
+
+    if (user.verificationToken !== token) {
+      return res.status(400).send({
+        status: "error",
+        message: "Invalid or expired verification token.",
+      });
+    }
+
+    // Update verification status
+    user.isVerified = true;
+    user.verificationToken = null;
+    await user.save();
+
+    return res.status(200).send({
+      status: "success",
+      message: "Your email has been successfully verified!",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).send({
+      status: "error",
+      message: "Invalid or expired verification link.",
+      error: error.message,
+    });
+  }
+});
+
+router.post("/resend-verification", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await findUser({ email });
+
+    if (!user) {
+      return res.status(404).send({
+        status: "error",
+        message: "User not found",
+      });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).send({
+        status: "error",
+        message: "Email is already verified.",
+      });
+    }
+
+    // Generate a new token
+    const verificationToken = jwt.sign(
+      { _id: user._id, email: user.email },
+      config.jwtSecret,
+      {
+        expiresIn: "3d",
+      }
+    );
+
+    user.verificationToken = verificationToken;
+    await user.save();
+
+    const verificationLink = `${process.env.BASE_URL}/auth/api/useremailverification/${verificationToken}`;
+
+    await sendVerificationMail(email, verificationLink);
+
+    return res.status(200).send({
+      status: "success",
+      message: "Verification email resent successfully.",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({
+      status: "error",
+      message: "Could not resend verification email.",
+      error: error.message,
+    });
+  }
+});
+
+
 
 export default router;
