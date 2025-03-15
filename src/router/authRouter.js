@@ -239,7 +239,7 @@ router.post("/resend-verification", async (req, res) => {
     user.verificationToken = verificationToken;
     await user.save();
 
-    const verificationLink = `${process.env.BASE_URL}/auth/api/useremailverification/${verificationToken}`;
+    const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
 
     await sendVerificationMail(email, verificationLink);
 
