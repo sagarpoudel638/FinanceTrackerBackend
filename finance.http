@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
   "name":"sagar",
-  "email" : "sagar@email.com",
+  "email" : "mailtosagarpoudel@gmail.com",
   "password": "ss",
   "confirmPassword": "ss"
 }
@@ -15,8 +15,8 @@ POST {{api_url}}/auth/login
 Content-Type: application/json
 
 {
-  "email" : "sagar@test.com",
-  "password": "test1234@"
+  "email" : "mailtosagarpoudel@gmail.com",
+  "password": "ss"
 }
 
 ### Create transactions 
@@ -58,3 +58,8 @@ Content-Type: application/json
 {
   "title": "updated"
 }
+
+###
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q0YTk0MmNmYzg2MDgzYzkzOWYwNmIiLCJlbWFpbCI6Im1haWx0b3NhZ2FycG91ZGVsQGdtYWlsLmNvbSIsIm5hbWUiOiJzYWdhciIsImlhdCI6MTc0MTk5MDIxMCwiZXhwIjoxNzQyMjQ5NDEwfQ.Q4vE82mNJ5FT3XmZquM7OBKUHDFh3lCsLhjORhxJQ-w
+GET  http://localhost:9000/api/v1/auth/useremailverification/{{token}}
+Content-Type: application/json

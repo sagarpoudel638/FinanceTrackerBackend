@@ -40,7 +40,7 @@ router.post("/signup", signupValidator, async (req, res) => {
       userData.verificationToken = verificationToken;
       await userData.save();
 
-      const verificationLink = `${process.env.BASE_URL}/auth/api/useremailverification/${verificationToken}`;
+      const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
       await sendVerificationMail(email, verificationLink);
       const respObj = {
         status: "success",
@@ -108,6 +108,10 @@ router.post("/login", loginValidator, async (req, res) => {
       return res.status(403).send({
         status: "error",
         message: "Please verify your email to access your account.",
+        error: {
+          code: 403,
+          details: "Not Verified",
+        },
       });
     }
     
@@ -152,7 +156,7 @@ router.get("/verify", authMiddleware, async (req, res) => {
 });
 
 // EMAIL VERIFICATION
-router.get("/api/useremailverification/:token", async (req, res) => {
+router.get("/useremailverification/:token", async (req, res) => {
   try {
     const { token } = req.params;
 
