@@ -7,9 +7,11 @@ import {
   updateTransaction,
 } from "../models/transactionsSchema.js";
 import { authMiddleware } from "../middleware/AuthMiddleware.js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import {getGeminiSuggestion, createGeminiPrompt} from "../utils/helper.js"
 
 const router = express.Router();
-
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // Get all Transactions
 router.get("/", authMiddleware, async (req, res) => {
   try {
@@ -167,4 +169,27 @@ router.patch("/:id", authMiddleware, async (req, res) => {
     return res.status(errObj.error.code).send(errObj);
   }
 });
+router.get('/suggestions', authMiddleware, async (req, res) => {
+  try {
+    let userId  = req.user._id;
+    let transactions = await getTransactions(userId);// Pass token
+    if (!transactions || transactions.length === 0) {
+      return res.status(200).json({ message: 'No transaction data available to generate suggestions.' });
+    }
+
+
+    const prompt = createGeminiPrompt(transactions);
+
+   
+    const suggestion = await getGeminiSuggestion(prompt);
+
+
+    res.status(200).json({ suggestion });
+
+  } catch (error) {
+    console.error('Error generating financial suggestions:', error);
+    res.status(500).json({ message: 'Failed to generate financial suggestions', error: error.message });
+  }
+});
+
 export default router;

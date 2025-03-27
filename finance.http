@@ -33,7 +33,7 @@ Content-Type: application/json
 
 ### Get all transactions 
 GET  {{api_url}}/transactions
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2M2NmJjODNkMDMxZTQ3YjhmMTFhMjYiLCJlbWFpbCI6InNhZ2FyQHRlc3QuY29tIiwibmFtZSI6IlNhZ2FyIiwiaWF0IjoxNzQxMTM3NzEyLCJleHAiOjE3NDEyMjQxMTJ9.xPIyq2Zw0wgzeCPE_YJo07gy03km1iA9BJozNcVGB0Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2RiOGY1OTI1OWI0OTAyOTU2OTZlNWYiLCJlbWFpbCI6Im1haWx0b3NhZ2FycG91ZGVsQGdtYWlsLmNvbSIsIm5hbWUiOiJTYWdhciBQb3VkZWwiLCJpYXQiOjE3NDI5MDE2NzksImV4cCI6MTc0Mjk4ODA3OX0.--1lXR5XkcT9aAtY2g3Jx5EkH50d5yoH10fELa9cNTM
 Content-Type: application/json
 
 
@@ -62,4 +62,10 @@ Content-Type: application/json
 ###
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q0YTk0MmNmYzg2MDgzYzkzOWYwNmIiLCJlbWFpbCI6Im1haWx0b3NhZ2FycG91ZGVsQGdtYWlsLmNvbSIsIm5hbWUiOiJzYWdhciIsImlhdCI6MTc0MTk5MDIxMCwiZXhwIjoxNzQyMjQ5NDEwfQ.Q4vE82mNJ5FT3XmZquM7OBKUHDFh3lCsLhjORhxJQ-w
 GET  http://localhost:9000/api/v1/auth/useremailverification/{{token}}
+Content-Type: application/json
+
+
+###
+GET http://localhost:9000/api/v1/transactions/suggestions
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2RiOGY1OTI1OWI0OTAyOTU2OTZlNWYiLCJlbWFpbCI6Im1haWx0b3NhZ2FycG91ZGVsQGdtYWlsLmNvbSIsIm5hbWUiOiJTYWdhciBQb3VkZWwiLCJpYXQiOjE3NDMwNjE0OTEsImV4cCI6MTc0MzE0Nzg5MX0.ZTtowE5LSlxcUtfwScUDk6V0gWzjqpWrhg0GPsKkROc
 Content-Type: application/json
