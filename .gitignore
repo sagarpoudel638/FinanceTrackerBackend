@@ -1,3 +1,5 @@
 node_modules
 .ds_store
 .env
+finance.http
+liveservertesting.http
