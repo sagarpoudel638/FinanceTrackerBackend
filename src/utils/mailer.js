@@ -1,21 +1,14 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.SMTP_USERNAME,
-    pass: process.env.SMTP_PASS,
-  },
-  family: 4, // force IPv4 — fixes ENETUNREACH on some hosts (Render, etc.)
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendVerificationMail = async (toEmail, verificationLink) => {
-  if (!process.env.SMTP_USERNAME || !process.env.SMTP_PASS) {
-    throw new Error("SMTP credentials are missing from environment variables.");
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error("RESEND_API_KEY is missing from environment variables.");
   }
 
-  const emailObj = {
-    from: `"Finance Tracker" <${process.env.SMTP_USERNAME}>`,
+  const { data, error } = await resend.emails.send({
+    from: "Finance Tracker <onboarding@resend.dev>",
     to: toEmail,
     subject: "Verify Your Email",
     text: `Please verify your email by clicking the link: ${verificationLink}`,
@@ -37,9 +30,13 @@ export const sendVerificationMail = async (toEmail, verificationLink) => {
         <p style="font-size: 14px; color: #666;">Best regards,<br>The Finance Tracker Team</p>
       </div>
     `,
-  };
+  });
 
-  const info = await transporter.sendMail(emailObj);
-  console.log("Verification email sent:", info.messageId);
-  return { status: "success", messageId: info.messageId };
+  if (error) {
+    console.error("Resend error:", error);
+    throw new Error(error.message);
+  }
+
+  console.log("Verification email sent:", data.id);
+  return { status: "success", messageId: data.id };
 };
