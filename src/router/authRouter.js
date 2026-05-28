@@ -40,24 +40,31 @@ router.post("/signup", signupValidator, async (req, res) => {
       userData.verificationToken = verificationToken;
       await userData.save();
 
-      const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
-      await sendVerificationMail(email, verificationLink);
+      // Email is non-critical — respond with success first, log email errors
       const respObj = {
         status: "success",
-        message: "User created successfully!",
+        message: "User created successfully! Please check your email to verify your account.",
       };
-      res.status(200).send(respObj);
+      res.status(201).send(respObj);
+
+      // Send verification email after responding (don't block or fail signup)
+      try {
+        const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+        await sendVerificationMail(email, verificationLink);
+      } catch (emailError) {
+        console.error("Verification email failed to send:", emailError.message);
+      }
     } else {
       let errObj = {
         status: "error",
-        message: "Password Did Not Match",
+        message: "Passwords do not match.",
         error: {
-          code: 500,
-          details: "Password Didnot Match",
+          code: 400,
+          details: "Password and confirm password must be the same.",
         },
       };
 
-      res.status(500).send(errObj);
+      res.status(400).send(errObj);
     }
   } catch (error) {
     let errObj = {

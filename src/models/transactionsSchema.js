@@ -39,15 +39,13 @@ export const getTransactionbyID = async (id, userId) => {
 };
 
 export const deleteTransaction = async (id, userId) => {
-  return await Transactions.findByIdAndDelete(id, userId);
+  return await Transactions.findOneAndDelete({ _id: id, userId });
 };
 
 export const updateTransaction = async (id, userId, updateData) => {
-  const data = await Transactions.findByIdAndUpdate(
+  const data = await Transactions.findOneAndUpdate(
     { _id: id, userId },
-    {
-      $set: updateData,
-    },
+    { $set: updateData },
     { new: true }
   );
   return data;

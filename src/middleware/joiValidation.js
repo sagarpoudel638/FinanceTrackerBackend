@@ -16,17 +16,16 @@ const signupSchema = Joi.object({
 
 
 
-const JoiValidator =(req,res,next,schema ) =>{
+const JoiValidator = (req, res, next, schema) => {
     try {
-        const {error} = schema.validate(req.body);
-        if(error){
-            return res.json({message:"Error in schema"+ error})
-        }
-        else{
+        const { error } = schema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
+        } else {
             next();
         }
     } catch (error) {
-        return res.json({message:"Error in schema"+ error})
+        return res.status(400).json({ message: "Validation error" });
     }
 }
 // Login Validator 

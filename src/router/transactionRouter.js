@@ -7,11 +7,9 @@ import {
   updateTransaction,
 } from "../models/transactionsSchema.js";
 import { authMiddleware } from "../middleware/AuthMiddleware.js";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import {getGeminiSuggestion, createGeminiPrompt} from "../utils/helper.js"
 
 const router = express.Router();
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // Get all Transactions
 router.get("/", authMiddleware, async (req, res) => {
   try {
@@ -81,7 +79,7 @@ router.post("/transaction",authMiddleware, async (req, res) => {
 });
 
 // get Transaction by ID
-router.post("/:id", authMiddleware, async (req, res) => {
+router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const userId = req.user._id;
     const { id } = req.params;
