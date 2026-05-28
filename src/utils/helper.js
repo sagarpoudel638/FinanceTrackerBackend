@@ -4,10 +4,11 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function getGeminiSuggestion(prompt) {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     const result = await model.generateContent(prompt);
     return result.response.text();
   } catch (error) {
+    console.error("Gemini API error:", error.status, error.message);
     if (error.status === 429) {
       throw new Error("AI_QUOTA_EXCEEDED");
     }
