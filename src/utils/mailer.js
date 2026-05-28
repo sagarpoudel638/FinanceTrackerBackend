@@ -8,7 +8,7 @@ export const sendVerificationMail = async (toEmail, verificationLink) => {
   }
 
   const { data, error } = await resend.emails.send({
-    from: "Finance Tracker <onboarding@resend.dev>",
+    from: "Finance Tracker <noreply@itsmesagar.com>",
     to: toEmail,
     subject: "Verify Your Email",
     text: `Please verify your email by clicking the link: ${verificationLink}`,
