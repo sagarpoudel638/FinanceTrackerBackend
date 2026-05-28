@@ -3,9 +3,16 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function getGeminiSuggestion(prompt) {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-  const result = await model.generateContent(prompt);
-  return result.response.text();
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+  } catch (error) {
+    if (error.status === 429) {
+      throw new Error("AI_QUOTA_EXCEEDED");
+    }
+    throw error;
+  }
 }
 
 export function createGeminiPrompt(transactions) {

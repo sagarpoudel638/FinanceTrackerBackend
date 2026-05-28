@@ -65,10 +65,14 @@ router.get("/suggestions", authMiddleware, async (req, res) => {
     const suggestion = await getGeminiSuggestion(prompt);
     return res.status(200).json({ suggestion });
   } catch (error) {
+    if (error.message === "AI_QUOTA_EXCEEDED") {
+      return res.status(429).json({
+        suggestion: "AI suggestions are temporarily unavailable — the daily API quota has been reached. Please try again tomorrow or contact the admin to upgrade the API plan.",
+      });
+    }
     console.error("Error generating financial suggestions:", error);
     return res.status(500).json({
-      message: "Failed to generate financial suggestions",
-      error: error.message,
+      suggestion: "Failed to generate suggestions. Please try again later.",
     });
   }
 });
