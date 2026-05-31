@@ -7,188 +7,139 @@ import {
   updateTransaction,
 } from "../models/transactionsSchema.js";
 import { authMiddleware } from "../middleware/AuthMiddleware.js";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import {getGeminiSuggestion, createGeminiPrompt} from "../utils/helper.js"
+import { getGeminiSuggestion, createGeminiPrompt } from "../utils/helper.js";
 
 const router = express.Router();
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-// Get all Transactions
+
+// Get all transactions
 router.get("/", authMiddleware, async (req, res) => {
   try {
-    let userId  = req.user._id;
-    let data = await getTransactions(userId);
-    let transactionData = [...data];
-
-    const respObj = {
+    const userId = req.user._id;
+    const data = await getTransactions(userId);
+    return res.status(200).send({
       status: "success",
       message: "All Transactions fetched",
-      data: transactionData,
-    };
-    return res.status(200).send(respObj);
+      data: [...data],
+    });
   } catch (error) {
-    const errObj = {
+    return res.status(500).send({
       status: "error",
-      message: "Error fetching",
-      error: {
-        code: 500,
-        details: error.message || "Error fetching transactions",
-      },
-    };
-    return res.status(500).send(errObj);
+      message: "Error fetching transactions",
+      error: { code: 500, details: error.message },
+    });
   }
 });
-router.post("/transaction",authMiddleware, async (req, res) => {
+
+// Create transaction
+router.post("/transaction", authMiddleware, async (req, res) => {
   try {
-    //console.log("User:", req.user);
-    console.log(req.body)
-    if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const userId = req.user._id; 
+    const userId = req.user._id;
     const { title, income, expenses, createdAt } = req.body;
-    // if (!title || !income || !createdAt) {
-    //   return res.status(400).json({
-    //     message: "Missing required fields: title, income, or createdAt",
-    //   });
-    // }
-    const transactionData = await createTransaction({
-
-      userId,
-      title,
-      income,
-      expenses,
-      createdAt,
-    });
-    const respObj = {
+    await createTransaction({ userId, title, income, expenses, createdAt });
+    return res.status(201).send({
       status: "success",
       message: "Transaction Added Successfully!",
-    };
-    console.log(transactionData);
-    res.status(200).send(respObj);
+    });
   } catch (error) {
-    let errObj = {
+    return res.status(500).send({
       status: "error",
       message: "Error Creating",
-      error: {
-        code: 500,
-        details: error.message || "Error creating transaction",
-      },
-    };
-
-    res.status(500).send(errObj);
+      error: { code: 500, details: error.message },
+    });
   }
 });
 
-// get Transaction by ID
-router.post("/:id", authMiddleware, async (req, res) => {
+// AI Suggestions — defined BEFORE /:id so Express doesn't treat "suggestions" as an ID
+router.get("/suggestions", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const transactions = await getTransactions(userId);
+
+    if (!transactions || transactions.length === 0) {
+      return res.status(200).json({
+        suggestion: "No transactions found. Add some income and expense records to get personalised suggestions.",
+      });
+    }
+
+    const prompt = createGeminiPrompt(transactions);
+    const suggestion = await getGeminiSuggestion(prompt);
+    return res.status(200).json({ suggestion });
+  } catch (error) {
+    if (error.message === "AI_QUOTA_EXCEEDED") {
+      return res.status(429).json({
+        suggestion: "AI suggestions are temporarily unavailable — the daily API quota has been reached. Please try again tomorrow or contact the admin to upgrade the API plan.",
+      });
+    }
+    console.error("Error generating financial suggestions:", error);
+    return res.status(500).json({
+      suggestion: "Failed to generate suggestions. Please try again later.",
+    });
+  }
+});
+
+// Get transaction by ID
+router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const userId = req.user._id;
     const { id } = req.params;
-    const transactionData = await getTransactionbyID(id,userId);
-
-    const resObj = {
+    const transactionData = await getTransactionbyID(id, userId);
+    return res.status(200).send({
       status: "success",
       message: "Successfully fetched Transaction",
       data: transactionData,
-    };
-    return res.status(200).send(resObj);
+    });
   } catch (error) {
-    let errObj = {
+    return res.status(500).send({
       status: "error",
-      message: "Error in  fetching Transaction",
-    };
-    return res.status(500).send(errObj);
+      message: "Error fetching Transaction",
+      error: { code: 500, details: error.message },
+    });
   }
 });
-// Create Transaction
-
 
 // Delete transaction
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     const userId = req.user._id;
     const { id } = req.params;
-    const transactionData = await getTransactionbyID(id,userId);
+    const transactionData = await getTransactionbyID(id, userId);
     if (!transactionData) {
-      const errObj = {
+      return res.status(404).send({
         status: "error",
         message: "Not Found",
-        error: {
-          code: 400,
-          details: "Transaction not found",
-        },
-      };
-      return res.status(404).send(errObj);
+        error: { code: 404, details: "Transaction not found" },
+      });
     }
-    await deleteTransaction(id);
-    const respObj = {
+    await deleteTransaction(id, userId);
+    return res.status(200).send({
       status: "success",
       message: "Transaction Deleted Successfully!",
-    };
-    return res.status(200).send(respObj);
+    });
   } catch (err) {
-    console.log(err);
-    const errObj = {
+    return res.status(500).send({
       status: "error",
       message: "Error Deleting",
-      error: {
-        code: 500,
-        details: err.message || "Error Deleting Transaction",
-      },
-    };
-
-    return res.status(500).send(errObj);
+      error: { code: 500, details: err.message },
+    });
   }
 });
 
-// Update transactions
-
+// Update transaction
 router.patch("/:id", authMiddleware, async (req, res) => {
   try {
     const userId = req.user._id;
     const { id } = req.params;
-    const transactionData = req.body;
-    const updatedData = await updateTransaction(id,userId,transactionData);
-    const respObj = {
+    await updateTransaction(id, userId, req.body);
+    return res.status(200).send({
       status: "success",
-      message: "Post updated successfully",
-    };
-    return res.status(200).send(respObj);
+      message: "Transaction updated successfully",
+    });
   } catch (err) {
-    console.log(err);
-    const errObj = {
+    return res.status(500).send({
       status: "error",
       message: "Error updating",
-      error: {
-        code: 500,
-        details: err.message || "Error updating transaction",
-      },
-    };
-
-    return res.status(errObj.error.code).send(errObj);
-  }
-});
-router.get('/suggestions', authMiddleware, async (req, res) => {
-  try {
-    let userId  = req.user._id;
-    let transactions = await getTransactions(userId);// Pass token
-    if (!transactions || transactions.length === 0) {
-      return res.status(200).json({ message: 'No transaction data available to generate suggestions.' });
-    }
-
-
-    const prompt = createGeminiPrompt(transactions);
-
-   
-    const suggestion = await getGeminiSuggestion(prompt);
-
-
-    res.status(200).json({ suggestion });
-
-  } catch (error) {
-    console.error('Error generating financial suggestions:', error);
-    res.status(500).json({ message: 'Failed to generate financial suggestions', error: error.message });
+      error: { code: 500, details: err.message },
+    });
   }
 });
 
